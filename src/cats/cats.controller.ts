@@ -52,11 +52,6 @@ export class CatsController {
   async findSingleCat(
     @Param('age', ParseIntPipe) age: number,
   ): Promise<CatDto> {
-    console.log('from controller', age);
-    // try {
     return this.catService.findSingleCat(age);
-    // } catch (error) {
-    //   throw new HttpException('Cat not found', HttpStatus.NOT_FOUND);
-    // }
   }
 }
