@@ -7,7 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { LicoriceGuard } from 'src/shared/licorice.guard';
 import { CreateProductDTO } from './dto/createProductDTO';
 import { UpdateProductDTO } from './dto/updateProductDTO';
 import { Product } from './entities/product';
@@ -26,8 +29,12 @@ export class ProductsController {
   }
 
   @Post()
-  createProduct(@Body() createProduct: CreateProductDTO): Promise<Product> {
-    return this.ProductService.createProduct(createProduct);
+  @UseGuards(LicoriceGuard)
+  createProduct(
+    @Req() req,
+    @Body() createProduct: CreateProductDTO,
+  ): Promise<Product> {
+    return this.ProductService.createProduct(req, createProduct);
   }
 
   @Patch(':id')

@@ -4,6 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  Req,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,22 +19,26 @@ export class ProductService {
     return this.productRepository.find();
   }
 
-  findSingleProduct(id: number): Promise<Product> {
-    return this.productRepository.findOneOrFail({
+  async findSingleProduct(id: number): Promise<Product> {
+    const product = await this.productRepository.findOne({
       where: {
         id: id,
       },
     });
+    if (!product) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    return product;
   }
 
-  createProduct(createProduct: CreateProductDTO): Promise<Product> {
+  createProduct(@Req() req, createProduct: CreateProductDTO): Promise<Product> {
+    console.log(req.title);
     const newProduct = {
       name: createProduct.name,
       description: createProduct.description,
       price: createProduct.price,
     };
 
-    console.log(newProduct);
     return this.productRepository.save(newProduct);
   }
 
@@ -47,7 +52,7 @@ export class ProductService {
       throw new NotFoundException(`Product #${id} not found`);
     }
 
-    // Copy over the properties from the updateProduct object to the product object
+    // Copy to new object
     let updated = Object.assign(updateProduct, product);
 
     // Update the product

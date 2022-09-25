@@ -1,22 +1,16 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-  ValidationPipe,
-} from '@nestjs/common';
-import { CatsModule } from './cats/cats.module';
-import { CatMiddleware } from './cats/cats.middleware';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
-import { ChocolateModule } from './chocolate/chocolate.module';
-import { ProductsController } from './products/products.controller';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { Product } from './products/entities/product';
+import { User } from './auth/entity/User';
+import { JwtModule } from './jwt/jwt.module';
 @Module({
   imports: [
-    CatsModule,
-    ChocolateModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
     ProductsModule,
     // TODO Move these to env vars
     TypeOrmModule.forRoot({
@@ -26,18 +20,14 @@ import { Product } from './products/entities/product';
       username: 'postgres',
       password: 'root',
       database: 'tudorgres',
-      entities: [Product],
+      entities: [User, Product],
       synchronize: true,
     }),
+    AuthModule,
+    JwtModule,
   ],
-  controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CatMiddleware).forRoutes({
-      path: 'products',
-      method: RequestMethod.POST,
-    });
-  }
+  configure(consumer: MiddlewareConsumer) {}
 }
