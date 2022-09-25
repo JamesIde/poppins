@@ -4,7 +4,7 @@ import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { Product } from './products/entities/product';
-import { User } from './auth/entity/User';
+import { User } from './auth/entities/User';
 import { JwtModule } from './jwt/jwt.module';
 @Module({
   imports: [
