@@ -23,7 +23,7 @@ export const isLicorice = (request) => {
   }
   // console.log(name);
   if (name.includes('berry') || name.includes('berry')) {
-    request.title = 'pog';
+    request.pog = 'pog';
     return true;
   }
   return false;

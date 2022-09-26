@@ -5,29 +5,23 @@ import {
   isNumberString,
   IsNumberString,
 } from 'class-validator';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
   @Column()
-  @IsString()
-  @IsNotEmpty()
   email: string;
 
-  @Column({ select: false })
-  @IsString()
-  @IsNotEmpty()
+  @Column()
   @MinLength(4)
   password: string;
 
   @Column({ default: 0 })
-  @IsNumberString()
   tokenVersion: number;
 }

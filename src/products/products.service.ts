@@ -13,8 +13,9 @@ import { UpdateProductDTO } from './dto/updateProductDTO';
 import { Product } from './entities/product';
 @Injectable()
 export class ProductService {
-  @InjectRepository(Product) private productRepository: Repository<Product>;
-
+  constructor(
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+  ) {}
   findAllProducts(): Promise<Product[]> {
     return this.productRepository.find();
   }
@@ -32,7 +33,6 @@ export class ProductService {
   }
 
   createProduct(@Req() req, createProduct: CreateProductDTO): Promise<Product> {
-    console.log(req.title);
     const newProduct = {
       name: createProduct.name,
       description: createProduct.description,

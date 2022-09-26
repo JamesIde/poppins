@@ -1,17 +1,21 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as cookieParser from 'cookie-parser';
+import 'colors';
 async function bootstrap() {
   // TODO Enable cors when frontend
   const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 5000;
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       whitelist: true,
     }),
   );
-  await app.listen(3000, () => {
-    console.log('Listening on port 3000');
+  app.use(cookieParser());
+  await app.listen(port, () => {
+    console.log(`🚀 Server started on port ${port}`.cyan.underline);
   });
 }
 bootstrap();

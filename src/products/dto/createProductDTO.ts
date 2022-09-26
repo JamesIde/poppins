@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateProductDTO {
   @IsString()
@@ -10,7 +17,8 @@ export class CreateProductDTO {
   @IsNotEmpty()
   description: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsNumber()
+  @Transform(({ value }) => Number(value))
   price: number;
 }

@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Transform } from 'class-transformer';
 import { LicoriceGuard } from 'src/shared/licorice.guard';
 import { CreateProductDTO } from './dto/createProductDTO';
 import { UpdateProductDTO } from './dto/updateProductDTO';
@@ -29,11 +30,11 @@ export class ProductsController {
   }
 
   @Post()
-  @UseGuards(LicoriceGuard)
+  // @UseGuards(LicoriceGuard)
   createProduct(
     @Req() req,
     @Body() createProduct: CreateProductDTO,
-  ): Promise<Product> {
+  ): Promise<Product> | any {
     return this.ProductService.createProduct(req, createProduct);
   }
 
