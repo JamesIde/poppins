@@ -42,7 +42,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(jwtGuard)
-  async getMe(@Req() req) {
+  async getMe(@Req() req): Promise<any> {
     return this.authService.getMe(req);
   }
 

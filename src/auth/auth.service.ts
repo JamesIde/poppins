@@ -6,6 +6,7 @@ import {
   Req,
   UnauthorizedException,
 } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/User';
@@ -14,8 +15,6 @@ import { LogInUserDto } from './dto/loginUserDto';
 import { LoggedInUserDto } from './dto/loggedInUserDto';
 import { RegisterUserDto } from './dto/registerUserDto';
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
-import { BadRequestException } from '@nestjs/common/exceptions';
 @Injectable()
 export class AuthService {
   constructor(
@@ -23,7 +22,6 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
   async loginUser(res, loginUser: LogInUserDto): Promise<LoggedInUserDto> {
-    // TODO Change user entity hide password, fetch user and get hidden fields
     const user = await this.userRepository.findOne({
       where: {
         email: loginUser.email,
@@ -123,10 +121,21 @@ export class AuthService {
 
   async getMe(@Req() request) {
     const userId = request.user.id;
-    return await this.userRepository.findOne({
+    // Map to avoid returning user password
+    const mapUser = await this.userRepository.findOne({
       where: {
         id: userId,
       },
+      relations: ['reviews'],
     });
+    const user = {
+      id: mapUser.id,
+      name: mapUser.name,
+      email: mapUser.email,
+      tokenVersion: mapUser.tokenVersion,
+      reviews: mapUser.reviews,
+    };
+
+    return user;
   }
 }

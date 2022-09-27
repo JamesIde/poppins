@@ -1,24 +1,39 @@
 import { Transform } from 'class-transformer';
 import {
+  IsArray,
   IsNotEmpty,
-  IsNumber,
   IsNumberString,
   IsString,
   MinLength,
 } from 'class-validator';
 
 export class CreateProductDTO {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @MinLength(3)
-  name: string;
+  productName: string;
 
+  @IsNotEmpty()
+  @IsArray()
+  productDescription: string[];
+
+  @IsNotEmpty()
+  @IsNumberString()
+  productPrice: number;
+
+  @IsNotEmpty()
+  @IsArray()
+  productImage: string[];
+
+  @IsNotEmpty()
   @IsString()
-  @IsNotEmpty()
-  description: string;
+  productCategory: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  @Transform(({ value }) => Number(value))
-  price: number;
+  @IsString()
+  productBrand: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  stockCount: number;
 }

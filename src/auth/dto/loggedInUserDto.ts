@@ -3,4 +3,5 @@ export class LoggedInUserDto {
   name: string;
   email: string;
   accessToken: string;
+  tokenVersion?: number;
 }

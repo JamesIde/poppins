@@ -3,11 +3,14 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { Product } from './products/entities/product';
+import { Product } from './products/entities/Product';
 import { JwtModule } from './jwt/jwt.module';
 import { HttpExceptionFilter } from './shared/http-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { User } from './auth/entities/User';
+import { OrdersModule } from './orders/orders.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { Review } from './reviews/entities/Review';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,11 +24,13 @@ import { User } from './auth/entities/User';
       url: process.env.DATABASE_URI,
       synchronize: true,
       logging: true,
-      entities: [Product, User],
       autoLoadEntities: true,
+      entities: [Product, User, Review],
     }),
-    AuthModule,
     JwtModule,
+    AuthModule,
+    OrdersModule,
+    ReviewsModule,
   ],
   providers: [
     {

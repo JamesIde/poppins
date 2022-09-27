@@ -5,7 +5,15 @@ import {
   isNumberString,
   IsNumberString,
 } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from 'src/products/entities/Product';
+import { Review } from 'src/reviews/entities/Review';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -19,9 +27,11 @@ export class User {
   email: string;
 
   @Column()
-  @MinLength(4)
   password: string;
 
   @Column({ default: 0 })
   tokenVersion: number;
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
 }
