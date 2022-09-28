@@ -1,0 +1,85 @@
+<section class="h-[83.6vh]">
+    <div class="px-6 h-[70vh] text-gray-800">
+        <div class="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
+
+            <div class="xl:w-5/12 lg:w-8/12 md:w-7/12 md:mx-auto mb-12 md:mb-0 mx-auto">
+                <h1 class="text-center font-bold text-2xl mb-2">
+                    Register New User
+                </h1>
+                <form [formGroup]="registerForm" (ngSubmit)="handleSubmit()">
+                    <div *ngIf="isError" class="text-center text-red-700">
+                        <p>
+                            {{errorMsg}}
+                        </p>
+                    </div>
+                    <div *ngIf="isLoading" class="text-center">
+                        <app-spinner></app-spinner>
+                    </div>
+                    <!-- Name input -->
+                    <div class="mb-6">
+                        <input type="text"
+                            class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                            placeholder="Full Name" formControlName="name" />
+                        <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+                            <span class="text-sm text-gray-500">
+                                Name is required
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Email input -->
+                    <div class="mb-6">
+                        <input type="text"
+                            class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                            placeholder="Email address" formControlName="email" />
+                        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                            <span class="text-sm text-gray-500">
+                                Email is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="mb-6">
+                        <input type="password"
+                            class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                            placeholder="Password" formControlName="password" />
+                        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                            <span class="text-sm text-gray-500">
+                                Password is required and must be 4 characters long.
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Confirm password input -->
+                    <div class="mb-6">
+                        <input type="password"
+                            class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                            placeholder="Confirm Password" formControlName="confirmPassword" />
+                        <div
+                            *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+                            <span class="text-sm text-gray-500">
+                                Password is required and must be 4 characters long.
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="text-center lg:text-left">
+                        <button type="submit" class="bg-blue-500 p-2 pl-5 pr-5 text-white font-bold   rounded"
+                            [disabled]="registerForm.invalid">
+                            Register
+                        </button>
+                        <p class="text-sm font-semibold mt-2 pt-1 mb-0">
+                            Already have an account?
+                            <a href="#!"
+                                class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+                                [routerLink]="['/login']">Login</a>
+                        </p>
+                        <div class="mt-2">
+                            <a href="#!" class="text-gray-800">Forgot password?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

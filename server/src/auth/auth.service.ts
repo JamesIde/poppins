@@ -46,7 +46,10 @@ export class AuthService {
     );
 
     if (!validPassword) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Invalid email or password, please try again.',
+      });
     }
 
     res.cookie('odin', this.jwtService.generateRefreshToken(user), {
