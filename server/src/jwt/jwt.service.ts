@@ -14,7 +14,7 @@ export class JwtService {
 
   generateAccessToken(user: User): string {
     return jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '7d', // TODO change after testing
+      expiresIn: '7d', // TODO http interceptors && change to 15min
     });
   }
 

@@ -33,6 +33,10 @@ export class ReviewsController {
   findOne(@Param('id') id: string) {
     return this.reviewsService.findOneReview(+id);
   }
+  @Get('product/:id')
+  findProductReviews(@Param('id') id: string) {
+    return this.reviewsService.findProductReviews(+id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {

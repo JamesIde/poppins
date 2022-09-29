@@ -22,6 +22,9 @@ export class Review {
   @Column()
   country: string;
 
+  @Column()
+  createdAt: string;
+
   @ManyToOne(() => User, (user) => user.reviews)
   user: User;
 

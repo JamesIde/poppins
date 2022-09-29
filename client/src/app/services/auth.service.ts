@@ -64,6 +64,7 @@ export class AuthService {
   }
 
   handleAuthResponse(user: User) {
+    // Emits the value to all subscribers to the loggedUser subject
     this.loggedUser.next(user);
     // TODO change to session storage once http interceptors
     localStorage.setItem('user', JSON.stringify(user));

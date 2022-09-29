@@ -1,0 +1,66 @@
+<div class="h-[100vh]">
+    <div *ngIf="isLoading" class="text-center h-[83.6vh]">
+        <app-spinner></app-spinner>
+        <p>
+            Loading...
+        </p>
+    </div>
+    <div class="text-center" *ngIf="isError">
+        <p class="font-bold text-red-500 text-lg">
+            Oh no.. :( {{errorMsg}}
+        </p>
+        <button
+            class="p-2 mt-2 text-white font-bold rounded bg-blue-500 hover:cursor-pointer hover:bg-blue-900 duration-500"
+            [routerLink]="['/']">
+            Return to Home
+        </button>
+    </div>
+    <section id="productDisplay" *ngIf="!isLoading">
+
+        <div class="xl:w-[45%] md:w-[75%] w-full m-2  mx-auto">
+            <button class="mb-5 rounded text-white font-bold p-2 ml-2 bg-blue-500 hover:bg-blue-900 duration-500"
+                [routerLink]="['/']">
+                Return to Home
+            </button>
+            <section id="productBanner">
+                <div class="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1">
+                    <div class="xl:w-[100%] w-full">
+                        <img class="w-full" [src]="product.productImage![0]" alt="product image">
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-center font-bold text-xl mb-2 mt-5">
+                            {{product.productName}}
+                        </h1>
+                        <div class="flex flex-row justify-between p-7 mx-auto">
+                            <p>
+                                Category: {{product.productCategory}}
+                            </p>
+                            <p>
+                                Brand: {{product.productBrand}}
+                            </p>
+                        </div>
+                        <div class="flex flex-row justify-between mx-auto">
+                            <p *ngIf="product.isStockAvailable" class="p-1 bg-green-600 text-white rounded ">
+                                In Stock
+                            </p>
+                            <p class="pr-5">
+                                Price:
+                                <span class="font-bold">
+                                    ${{product.productPrice}}
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-center mb-2">
+                                About {{product.productName}}
+                            </h5>
+                            <p *ngFor="let description of product.productDescription" class="text-sm italic mb-2">
+                                {{description}}.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</div>

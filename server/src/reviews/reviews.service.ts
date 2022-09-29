@@ -10,6 +10,7 @@ export class ReviewsService {
   constructor(
     @InjectRepository(Review) private reviewRepository: Repository<Review>,
   ) {}
+
   createReview(@Req() req, createReviewDto: CreateReviewDto) {
     const productId = req.query.product;
 
@@ -19,9 +20,14 @@ export class ReviewsService {
       );
     }
 
+    let AuDate = new Date().toLocaleString('en-US', {
+      timeZone: 'Australia/Sydney',
+    });
+
     // Create the new review
     const newReview = this.reviewRepository.create({
       ...createReviewDto,
+      createdAt: AuDate,
       product: productId,
       user: req.user,
     });
@@ -30,9 +36,20 @@ export class ReviewsService {
   }
 
   findAllReviews() {
-    // TODO possible query runner to avoid returning password
+    // Return all reviews with their products
     return this.reviewRepository.find({
-      relations: ['user', 'product'],
+      relations: ['product'],
+    });
+  }
+
+  findProductReviews(id: number) {
+    // Return all reviews with their products
+    return this.reviewRepository.find({
+      where: {
+        product: {
+          id: id,
+        },
+      },
     });
   }
 

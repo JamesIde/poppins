@@ -16,7 +16,6 @@ import { Review } from './reviews/entities/Review';
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
-    ProductsModule,
     TypeOrmModule.forRoot({
       name: 'default',
       type: 'postgres',
@@ -26,6 +25,7 @@ import { Review } from './reviews/entities/Review';
       autoLoadEntities: true,
       entities: [Product, User, Review],
     }),
+    ProductsModule,
     JwtModule,
     AuthModule,
     OrdersModule,

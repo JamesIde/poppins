@@ -12,8 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CreateProductDTO } from './dto/createProductDTO';
-import { UpdateProductDTO } from './dto/updateProductDTO';
+import { CreateProductDTO } from './dto/createProductDto';
+import { SingleProduct } from './dto/getProductDto';
+import { UpdateProductDTO } from './dto/updateProductDto';
 import { Product } from './entities/Product';
 import { ProductService } from './products.service';
 @Controller('products')
@@ -24,11 +25,14 @@ export class ProductsController {
     return this.ProductService.findAllProducts({
       take: req.query.hasOwnProperty('take') ? req.query.take : 10,
       skip: req.query.hasOwnProperty('skip') ? req.query.skip : 0,
+      category: req.query.hasOwnProperty('category')
+        ? req.query.category
+        : null,
     });
   }
 
   @Get(':id')
-  getProduct(@Param('id', ParseIntPipe) id: number): Promise<Product> {
+  getProduct(@Param('id', ParseIntPipe) id: number): Promise<SingleProduct> {
     return this.ProductService.findSingleProduct(id);
   }
 

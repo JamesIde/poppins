@@ -1,35 +1,53 @@
 import {
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
   Req,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { create } from 'domain';
+import { Review } from 'src/reviews/entities/Review';
+import { ReviewsService } from 'src/reviews/reviews.service';
 import { Repository } from 'typeorm';
-import { CreateProductDTO } from './dto/createProductDTO';
-import { UpdateProductDTO } from './dto/updateProductDTO';
+import { CreateProductDTO } from './dto/createProductDto';
+import { UpdateProductDTO } from './dto/updateProductDto';
+import { SingleProduct } from './dto/getProductDto';
 import { Product } from './entities/Product';
 @Injectable()
 export class ProductService {
+  @Inject(ReviewsService)
+  private reviewService: ReviewsService;
   constructor(
-    @InjectRepository(Product) private productRepository: Repository<Product>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
   ) {}
-  findAllProducts({ take, skip }): Promise<Product[]> {
+  findAllProducts({ take, skip, category }): Promise<Product[]> {
     // Take is the max number of records to return
     // Skip is the number of records to skip
+
+    // Validate category filter
+    if (this.isValidCategory(category)) {
+      return this.productRepository.find({
+        take: take,
+        skip: skip,
+        where: {
+          productCategory: category,
+        },
+      });
+    }
+
+    // Else return all products
     return this.productRepository.find({
       take: take,
       skip: skip,
-      relations: {
-        reviews: true,
-      },
     });
   }
 
-  async findSingleProduct(id: number): Promise<Product> {
+  async findSingleProduct(id: number): Promise<SingleProduct> {
+    // Find all reviews associated with a product
+    const reviews = await this.reviewService.findProductReviews(+id);
     const product = await this.productRepository.findOne({
       where: {
         id: id,
@@ -38,7 +56,16 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
     }
-    return product;
+
+    // Calculate average rating
+    const averageRating = this.calculateAverageRating(reviews);
+
+    return {
+      product,
+      reviews,
+      averageRating: averageRating,
+      reviewCount: reviews.length,
+    };
   }
 
   createProduct(createProduct: CreateProductDTO): Promise<Product> | any {
@@ -102,5 +129,22 @@ export class ProductService {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  isValidCategory(category: string): boolean {
+    const categories = ['Phone', 'Watch', 'iPad'];
+
+    if (categories.includes(category)) {
+      return true;
+    }
+    return false;
+  }
+
+  calculateAverageRating(reviews: Review[]) {
+    let total = 0;
+    reviews.forEach((review) => {
+      total += review.rating;
+    });
+    return total / reviews.length;
   }
 }
