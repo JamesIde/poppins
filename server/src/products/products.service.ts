@@ -68,6 +68,48 @@ export class ProductService {
     };
   }
 
+  async getProductCartValidation(id: number): Promise<boolean | Product> {
+    if (!id) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Product ID is required',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const product = await this.productRepository.findOne({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        stockCount: true,
+        productPrice: true,
+        isStockAvailable: true,
+        productName: true,
+        productSlug: true,
+        productImage: true,
+      },
+    });
+    if (!product) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    // In stock, price matches
+    if (product.isStockAvailable) {
+      return product;
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: ' Something went wrong, please try again later',
+        },
+        400,
+      );
+    }
+  }
+
   createProduct(createProduct: CreateProductDTO): Promise<Product> | any {
     const productExist = this.productRepository.findOne({
       where: {

@@ -19,10 +19,10 @@ import { Product } from './entities/Product';
 import { ProductService } from './products.service';
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly ProductService: ProductService) {}
+  constructor(private readonly productService: ProductService) {}
   @Get()
   getProducts(@Req() req: Request): Promise<Product[]> {
-    return this.ProductService.findAllProducts({
+    return this.productService.findAllProducts({
       take: req.query.hasOwnProperty('take') ? req.query.take : 10,
       skip: req.query.hasOwnProperty('skip') ? req.query.skip : 0,
       category: req.query.hasOwnProperty('category')
@@ -33,12 +33,19 @@ export class ProductsController {
 
   @Get(':id')
   getProduct(@Param('id', ParseIntPipe) id: number): Promise<SingleProduct> {
-    return this.ProductService.findSingleProduct(id);
+    return this.productService.findSingleProduct(id);
+  }
+
+  @Get('validate/:id')
+  validateProduct(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<boolean | Product> {
+    return this.productService.getProductCartValidation(id);
   }
 
   @Post()
   createProduct(@Body() createProduct: CreateProductDTO): Promise<Product> {
-    return this.ProductService.createProduct(createProduct);
+    return this.productService.createProduct(createProduct);
   }
 
   @Patch(':id')
@@ -46,11 +53,11 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProduct: UpdateProductDTO,
   ): Promise<Product> | string {
-    return this.ProductService.updateProduct(id, updateProduct);
+    return this.productService.updateProduct(id, updateProduct);
   }
 
   @Delete(':id')
   deleteProduct(@Param('id', ParseIntPipe) id: number) {
-    return this.ProductService.deleteProduct(id);
+    return this.productService.deleteProduct(id);
   }
 }
