@@ -32,7 +32,7 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error:
+          message:
             'No account found - please register or check the details entered',
         },
         400,

@@ -22,13 +22,7 @@ export class ProductsController {
   constructor(private readonly productService: ProductService) {}
   @Get()
   getProducts(@Req() req: Request): Promise<Product[]> {
-    return this.productService.findAllProducts({
-      take: req.query.hasOwnProperty('take') ? req.query.take : 10,
-      skip: req.query.hasOwnProperty('skip') ? req.query.skip : 0,
-      category: req.query.hasOwnProperty('category')
-        ? req.query.category
-        : null,
-    });
+    return this.productService.findAllProducts(req);
   }
 
   @Get(':id')

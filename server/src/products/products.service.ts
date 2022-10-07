@@ -23,15 +23,21 @@ export class ProductService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
   ) {}
-  findAllProducts({ take, skip, category }): Promise<Product[]> {
+  findAllProducts(req): Promise<Product[]> {
+    let take = req.query.hasOwnProperty('take') ? req.query.take : 10;
+    let skip = req.query.hasOwnProperty('skip') ? req.query.skip : 0;
+    let category = req.query.hasOwnProperty('category')
+      ? req.query.category
+      : null;
+
     // Take is the max number of records to return
     // Skip is the number of records to skip
 
     // Validate category filter
     if (this.isValidCategory(category)) {
       return this.productRepository.find({
-        take: take,
-        skip: skip,
+        take,
+        skip,
         where: {
           productCategory: category,
         },

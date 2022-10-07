@@ -18,7 +18,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: status,
       timestamp: new Date().toLocaleString('en-AU'),
       message:
-        exception['response']['message'] || exception.message || exception,
+        exception['response']['message'] ||
+        exception.message ||
+        exception ||
+        exception['error'],
       path: request.url,
     });
   }

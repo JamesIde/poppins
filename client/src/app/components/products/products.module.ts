@@ -6,6 +6,7 @@ import { ProductPageComponent } from './product-page/product-page.component';
 import { RouterModule } from '@angular/router';
 import { ProductRoutingModule } from './product-routing.module';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ProductsComponent, ProductPageComponent],
@@ -15,6 +16,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     RouterModule,
     ProductRoutingModule,
     NgImageSliderModule,
+    ReactiveFormsModule,
   ],
   exports: [ProductsComponent],
 })
