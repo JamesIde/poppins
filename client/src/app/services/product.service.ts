@@ -16,7 +16,7 @@ import { Product } from '../types/product-interface';
 })
 export class ProductService {
   constructor(private http: HttpClient) {}
-  productsArraySub$ = new BehaviorSubject<Product>(null);
+  productsArraySub$ = new BehaviorSubject<Product[]>(null);
   // TODO add type to this request when author/createdat review is fixed
   getProducts(category: string | null): Observable<Product> {
     return this.http
@@ -37,7 +37,7 @@ export class ProductService {
       );
   }
 
-  getProduct(id: string, slug: string): Observable<Product> {
+  getProduct(id: string): Observable<Product> {
     return this.http
       .get<any>(`${environment.SERVER_DOMAIN}/products/${id}`)
       .pipe(

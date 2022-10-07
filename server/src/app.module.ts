@@ -11,6 +11,7 @@ import { User } from './auth/entities/User';
 import { OrdersModule } from './orders/orders.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { Review } from './reviews/entities/Review';
+import { CartModule } from './cart/cart.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +31,7 @@ import { Review } from './reviews/entities/Review';
     AuthModule,
     OrdersModule,
     ReviewsModule,
+    CartModule,
   ],
   providers: [
     {

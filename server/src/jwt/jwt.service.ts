@@ -86,7 +86,17 @@ export class JwtService {
   async revokeRefreshToken(@Req() request: Request): Promise<boolean> {
     const token = request.cookies.odin;
 
-    if (!token) {
+    // First check the cookie name is correct
+    if (!request.cookies.odin) {
+      throw new HttpException(
+        {
+          message: 'Please ensure a cookie is provided',
+        },
+        401,
+      );
+    }
+
+    if (!token || token === null) {
       throw new HttpException(
         {
           message: 'No token provided',
@@ -100,6 +110,7 @@ export class JwtService {
     try {
       payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
     } catch (error) {
+      console.log(error);
       throw new HttpException(
         {
           message: error,
@@ -123,7 +134,10 @@ export class JwtService {
       );
     }
 
-    if (validUser.tokenVersion !== payload.tokenVersion) {
+    if (validUser.tokenVersion === payload.tokenVersion) {
+      validUser.tokenVersion += 1;
+      await this.userRepository.save(validUser);
+    } else {
       throw new HttpException(
         {
           message: 'Token version is invalid, please try again',
@@ -131,10 +145,6 @@ export class JwtService {
         401,
       );
     }
-
-    validUser.tokenVersion += 1;
-
-    await this.userRepository.save(validUser);
 
     return true;
   }

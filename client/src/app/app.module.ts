@@ -14,7 +14,6 @@ import { SharedModule } from './components/shared/shared.module';
 @NgModule({
   // Import global components (header, footer, etc.)
   declarations: [HeaderComponent, AppComponent, FooterComponent],
-  // Import our modules
   imports: [
     BrowserModule,
     AppRoutingModule,

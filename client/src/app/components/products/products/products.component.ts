@@ -22,15 +22,16 @@ export class ProductsComponent implements OnInit {
   // Component initialization
   ngOnInit(): void {
     this.isLoading = true;
+    setTimeout(() => {
+      this.productSubscription =
+        this.productService.productsArraySub$.subscribe((products) => {
+          console.log('products', products);
+          this.products = products;
+          this.isLoading = false;
+          this.isRadioChecked = false;
+        });
+    }, 1000);
     // Prevents radio filter box on reload
-    this.productSubscription = this.productService.productsArraySub$.subscribe(
-      (products) => {
-        console.log('products', products);
-        this.products = products;
-        this.isLoading = false;
-        this.isRadioChecked = false;
-      }
-    );
   }
 
   handleCategoryFilter(category: string): void {
