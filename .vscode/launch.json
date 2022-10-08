@@ -5,14 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach",
-            "port": 9229,
-            "request": "attach",
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "type": "node"
-        },
-        
+            "program": "${workspaceFolder}\\server\\src\\cart\\cart.service.ts",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        }
     ]
 }

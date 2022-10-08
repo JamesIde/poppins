@@ -35,8 +35,13 @@ export class ProductsComponent implements OnInit {
   }
 
   handleCategoryFilter(category: string): void {
-    this.isRadioChecked = true;
-    this.isLoading = true;
     this.productService.getProducts(category).subscribe();
+    this.isLoading = true;
+    this.isRadioChecked = true;
+  }
+  removeCategoryFilter(): void{
+    this.isRadioChecked = false;
+    this.isLoading = true;
+    this.productService.getProducts(null).subscribe();
   }
 }
