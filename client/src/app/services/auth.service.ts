@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { LoginUser, RegisterUser, User } from '../types/user-interface';
+import { LoginUser, RegisterUser, User } from '../types/User';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -52,8 +52,10 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('user')!);
     if (user) {
       this.loggedUser.next(user);
+      return user;
+    } else {
+      return null;
     }
-    return user;
   }
 
   /* Auth handlers */
@@ -61,13 +63,6 @@ export class AuthService {
   handleLogout() {
     this.loggedUser.next(null);
     localStorage.removeItem('user');
-  }
-
-  handleAuthResponse(user: User) {
-    // Emits the value to all subscribers to the loggedUser subject
-    this.loggedUser.next(user);
-    // TODO change to session storage once http interceptors
-    localStorage.setItem('user', JSON.stringify(user));
   }
 
   /* Profile getter */
@@ -87,5 +82,26 @@ export class AuthService {
           return throwError(() => error);
         })
       );
+  }
+
+  handleAuthResponse(user: User) {
+    // Emits the value to all subscribers to the loggedUser subject
+    this.loggedUser.next(user);
+    // TODO change to session storage once http interceptors
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  // Auth Interceptors
+  getAccessToken(): string | null {
+    return this.loggedUser.value.accessToken
+      ? this.loggedUser.value.accessToken
+      : null;
+  }
+
+  setAccessToken(token: string) {
+    const user: User = this.loggedUser.value;
+    user.accessToken = token;
+    localStorage.setItem('user', JSON.stringify(user));
+    this.loggedUser.next(user);
   }
 }

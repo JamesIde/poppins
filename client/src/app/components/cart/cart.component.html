@@ -1,0 +1,129 @@
+<div class="h-100">
+  <div class="text-center" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+  </div>
+  <div *ngIf="!isLoading">
+    <section id="cart-item-header">
+      <div class="xl:w-[55%] md:w-[75%] w-[85%] mx-auto mb-4">
+        <h3 class="font-bold text-2xl mb-2">Shopping Cart</h3>
+        <hr />
+      </div>
+      <section id="cart-item-warnings">
+        <div *ngIf="cart.cartItems.length === 0">
+          <p class="text-center font-bold text-2xl mt-2 mb-4">
+            Your Cart appears to be empty!
+          </p>
+          <p
+            class="text-center font-bold hover:text-blue-500 hover:cursor-pointer duration-500"
+            [routerLink]="['/']"
+          >
+            Click here to start shopping!
+          </p>
+        </div>
+      </section>
+    </section>
+    <section id="flex-cart-wrapper" *ngIf="cart.cartItems.length != 0">
+      <div class="flex flex-row xl:w-[55%] md:w-[75%] w-[85%] mx-auto">
+        <div class="w-[100%]">
+          <section id="flex-cart-items" *ngFor="let item of cart.cartItems">
+            <div class="border-red-500 flex flex-row">
+              <div class="">
+                <img
+                  src="{{ item.productImage }}"
+                  alt="{{ item.productName }}"
+                  class="w-[350px]"
+                />
+              </div>
+              <div class="w-full">
+                <div class="flex flex-row w-full justify-between">
+                  <div class="">
+                    <p class="font-bold text-lg mt-3 mb-3">
+                      ${{ item.productPrice }}
+                    </p>
+                    <p>
+                      {{ item.productName }}
+                    </p>
+                    <p>
+                      {{ item.quantity }}
+                    </p>
+                    <p>
+                      {{ item.totalPrice }}
+                    </p>
+                  </div>
+                  <div
+                    class="w-[7%] hover:cursor-pointer"
+                    (click)="removeCartItem(item)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 256 256"
+                    >
+                      <rect width="25" height="25" fill="none" />
+                      <circle
+                        cx="128"
+                        cy="128"
+                        r="96"
+                        fill="none"
+                        stroke="#000"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="8"
+                      />
+                      <line
+                        x1="160"
+                        y1="96"
+                        x2="96"
+                        y2="160"
+                        fill="none"
+                        stroke="#000"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="8"
+                      />
+                      <line
+                        x1="160"
+                        y1="160"
+                        x2="96"
+                        y2="96"
+                        fill="none"
+                        stroke="#000"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="8"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="mt-2 mb-2" />
+          </section>
+        </div>
+        <div class="border-yellow-200 w-[55%] ml-auto">
+          <h3 class="text-center font-bold mt-2 mb-3 text-2xl">Checkout</h3>
+          <div class="flex justify-end">
+            <p>
+              Subtotal: <span class="font-bold"> ${{ cart.cartTotal }} </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="mx-auto flex justify-end xl:w-[55%] md:w-[75%] w-[85%]">
+        <button
+          *ngIf="cart.cartItems"
+          (click)="clearCart()"
+          class="text-white font-bold rounded p-2 bg-blue-500 hover:bg-blue-900 duration-500 hover:cursor-pointer mr-3"
+        >
+          Clear Cart
+        </button>
+        <button
+          *ngIf="cart.cartItems.length > 0"
+          [routerLink]="['/']"
+          class="text-white font-bold rounded p-2 bg-purple-500 hover:bg-purple-900 duration-500 hover:cursor-pointer"
+        >
+          Continue Shopping
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

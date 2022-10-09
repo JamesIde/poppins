@@ -5,94 +5,58 @@
   <div *ngIf="isError">
     {{ errorMsg }}
   </div>
-        <div class="text-center">
-
-          <p class="text-center font-bold mb-2 mt-2">Filter By</p>
-          <div class="flex flex-row justify-center">
-            <div class="p-2">
-              <input
-              type="radio"
-              id="html"
-              name="fav_language"
-              value="HTML"
-              (click)="handleCategoryFilter('Phone')"
-              />
-              <label for="html">Phone</label><br />
-            </div>
-            <div class="p-2">
-              <input
-              type="radio"
-              id="css"
-              name="fav_language"
-              value="CSS"
-              (click)="handleCategoryFilter('Watch')"
-              />
-              <label for="css" class="">Watch</label><br />
-            </div>
-            <div class="p-2">
-              <input
-              type="radio"
-              id="javascript"
-              name="fav_language"
-              value="JavaScript"
-              (click)="handleCategoryFilter('iPad')"
-              />
-              <label for="javascript">iPad</label>
-            </div>
-            <div class="p-2">
-              <input
-              type="radio"
-              id="clearSelection"
-              name="fav_language"
-              value="clearSelection"
-              (click)="removeCategoryFilter()"
-              />
-              <label for="clearSelection">All</label>
-            </div>
-          </div>  
-      
-            <div *ngIf="!isLoading" class="h-[100vh]">
-              <div class="ml-5 mr-5 h-auto">
-                <div class="grid xl:grid-cols-4 md:grid-cols-3 grid-col-2 gap-6">
-        <div *ngFor="let product of products">
-          <div class="border-b-[1px] border-[black]">
-            <div id="productImage" class="w-full">
-              <a
-              [routerLink]="[
-              '/product/' + product.id + ['/'] + product.productSlug
-              ]"
-              >
-              <img src="{{ product.productImage[0] }}" alt="" />
-            </a>
-          </div>
-          <div id="product-details p-2">
-            <div class="flex flex-row justify-evenly">
-              <p class="p-2 font-md mt-2 w-full">
-                {{ product.productName }}
-              </p>
-              <p class="p-2 font-bold font-md mt-2">
-                ${{ product.productPrice }}
-              </p>
-            </div>
-            <div class="flex flex-row justify-between p-2 text-sm">
-              <p>Brand: {{ product.productBrand }}</p>
-              <p>Category: {{ product.productCategory }}</p>
-            </div>
-            <div class="flex justify-center mb-2">
-                <p
-                class="text-gray-800 text-sm font-semibold border ml-2 px-4 py-2 rounded-lg hover:text-purple-600 hover:border-purple-600 hover: cursor-pointer"
-                [routerLink]="[
-                '/product/' + product.id + ['/'] + product.productSlug
-                ]"
-                >
-                View Product
-              </p>
-            </div>
+  <div class="text-center">
+    <p class="text-center font-bold mb-2 mt-2">Filter By</p>
+    <div class="flex flex-row justify-center">
+      <div class="p-2">
+        <input
+          type="radio"
+          id="html"
+          name="fav_language"
+          value="HTML"
+          (click)="handleCategoryFilter('Phone')"
+        />
+        <label for="html">Phone</label><br />
+      </div>
+      <div class="p-2">
+        <input
+          type="radio"
+          id="css"
+          name="fav_language"
+          value="CSS"
+          (click)="handleCategoryFilter('Watch')"
+        />
+        <label for="css" class="">Watch</label><br />
+      </div>
+      <div class="p-2">
+        <input
+          type="radio"
+          id="javascript"
+          name="fav_language"
+          value="JavaScript"
+          (click)="handleCategoryFilter('iPad')"
+        />
+        <label for="javascript">iPad</label>
+      </div>
+      <div class="p-2">
+        <input
+          type="radio"
+          id="clearSelection"
+          name="fav_language"
+          value="clearSelection"
+          (click)="removeCategoryFilter()"
+        />
+        <label for="clearSelection">All</label>
+      </div>
+    </div>
+    <div *ngIf="!isLoading" class="h-max">
+      <div class="ml-5 mr-5 h-auto mb-2">
+        <div class="grid xl:grid-cols-4 md:grid-cols-3 grid-col-2 gap-6">
+          <div *ngFor="let product of products">
+            <app-product-card [product]="product"></app-product-card>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
 </section>

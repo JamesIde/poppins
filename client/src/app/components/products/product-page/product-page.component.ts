@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
-import { Product, Review } from 'src/app/types/product-interface';
+import { Product } from 'src/app/types/Product';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-page',
@@ -13,18 +14,24 @@ import { Product, Review } from 'src/app/types/product-interface';
 export class ProductPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService,
+    private toastr: ToastrService
   ) {}
+
   product: Product;
   isLoading!: boolean;
   isError!: boolean;
   errorMsg!: string;
+
+  isAddedToCart: boolean;
 
   // Review Form
   reviewForm!: FormGroup;
 
   // Image Slider Array
   imageObject: Array<Object> = [];
+
   // Queryable id
   id: string = this.route.snapshot.params['id'];
   ngOnInit(): void {
@@ -35,6 +42,7 @@ export class ProductPageComponent implements OnInit {
         this.isLoading = false;
         console.log(this.product);
         this.imageObject = this.processImageArray(this.product);
+        console.log(this.imageObject);
       },
       error: (error) => {
         this.isLoading = false;
@@ -61,9 +69,40 @@ export class ProductPageComponent implements OnInit {
       return {
         image: image,
         thumbImage: image,
-        alt: product.productName,
-        title: product.productSlug,
+        alt: '',
       };
+    });
+  }
+
+  handleItemClick(product: Product) {
+    this.isAddedToCart = true;
+    // Map to acceptable format
+    const addProduct = {
+      id: product.id,
+      productName: product.productName,
+      productPrice: product.productPrice,
+      productImage: product.productImage[0],
+      productSlug: product.productSlug,
+    };
+
+    this.cartService.addItemToCart(addProduct).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.isAddedToCart = false;
+        this.toastr.success(
+          `${addProduct.productName} added to cart`,
+          'Success!',
+          {
+            positionClass: 'toast-top-center',
+          }
+        );
+      },
+      error: (error) => {
+        this.isAddedToCart = false;
+        console.log(error);
+        this.isError = true;
+        this.errorMsg = error.error.message || error.message;
+      },
     });
   }
 }

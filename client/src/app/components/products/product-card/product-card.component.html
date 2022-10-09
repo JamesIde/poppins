@@ -1,0 +1,35 @@
+<div class="border-b-[1px] border-[black]">
+    <div id="productImage" class="w-full">
+      <a
+      [routerLink]="[
+      '/product/' + product.id + ['/'] + product.productSlug
+      ]"
+      >
+      <img src="{{ product.productImage[0] }}" alt="" />
+    </a>
+  </div>
+  <div id="product-details p-2">
+    <div class="flex flex-row justify-evenly">
+      <p class="p-2 font-md mt-2 w-full">
+        {{ product.productName }}
+      </p>
+      <p class="p-2 font-bold font-md mt-2">
+        ${{ product.productPrice }}
+      </p>
+    </div>
+    <div class="flex flex-row justify-between p-2 text-sm">
+      <p>Brand: {{ product.productBrand }}</p>
+      <p>Category: {{ product.productCategory }}</p>
+    </div>
+    <div class="flex justify-center mb-2">
+        <p
+        class="text-gray-800 text-sm font-semibold border ml-2 px-4 py-2 rounded-lg hover:text-purple-600 hover:border-purple-600 hover: cursor-pointer"
+        [routerLink]="[
+        '/product/' + product.id + ['/'] + product.productSlug
+        ]"
+        >
+        View Product
+      </p>
+    </div>
+  </div>
+</div>

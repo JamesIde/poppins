@@ -137,7 +137,9 @@ export class CartService {
           );
         }
       }
-    } else if (updateCartItem.CART_ACTION === CART_ACTION.REMOVE_ITEM) {
+    } else if (
+      updateCartItem.CART_ACTION === CART_ACTION.DECREASE_ITEM_QUANTITY
+    ) {
       let cart: ShoppingCart = JSON.parse(req.cookies.userCart);
       let itemIdx: number;
       await this.validateParsedCookie(cart);
@@ -147,6 +149,20 @@ export class CartService {
         // Decrement quantity
         if (itemIdx !== -1) {
           return this.decrementItemQuantity(cart, itemIdx, res, updateCartItem);
+        }
+      }
+    } else if (
+      updateCartItem.CART_ACTION === CART_ACTION.REMOVE_ITEM_FROM_CART
+    ) {
+      let cart: ShoppingCart = JSON.parse(req.cookies.userCart);
+      let itemIdx: number;
+      await this.validateParsedCookie(cart);
+      if (await this.validateItemPayload(updateCartItem)) {
+        itemIdx = this.findItemIndex(cart, updateCartItem);
+
+        // Decrement quantity
+        if (itemIdx !== -1) {
+          return this.removeItemFromCart(cart, itemIdx, res, updateCartItem);
         }
       }
     } else {
@@ -166,7 +182,7 @@ export class CartService {
 
   /**
    * A private function to update the quantity of an item in the cart
-   * It calls the sendCartCookie function to update the cookie and calculate total cost of the cart
+   * It calls the @sendCartCookie function to update the cookie and the @calculateCardTotal function to get the cart total
    */
   private updateItemQuantity(
     cart: ShoppingCart,
@@ -188,7 +204,7 @@ export class CartService {
 
   /**
    * A private function to decrememnt the quantity of an item in the cart
-   * It calls the sendCartCookie function to update the cookie and calculate total cost of the cart
+   * It calls the @sendCartCookie function to update the cookie and the @calculateCardTotal function to get the cart total
    */
   private decrementItemQuantity(
     cart: ShoppingCart,
@@ -218,6 +234,25 @@ export class CartService {
       message: `${cartItem.productName} quantity decremented`,
     };
   }
+  /**
+   *  A private function to remove an item from the cart
+   * It calls the @sendCartCookie function to update the cookie and the @calculateCardTotal function to get the cart total
+   *
+   */
+  private removeItemFromCart(
+    cart: ShoppingCart,
+    itemIdx: number,
+    res: any,
+    cartItem: CartItemDto | UpdateCartItem,
+  ) {
+    cart.cartItems.splice(itemIdx, 1);
+    cart.cartTotal = this.calculateCartTotal(cart);
+    this.sendCartCookie(cart, res);
+    console.log(`ITEM REMOVED FROM CART - ${cartItem.productName}`);
+    return {
+      message: `${cartItem.productName} removed from cart`,
+    };
+  }
 
   /**
    * A private method for finding the index of an item in the cart
@@ -232,6 +267,7 @@ export class CartService {
   /**
    * A private method for parsing the userCart cookie to check for unknown data
    * Acts as a security measure to prevent malicious data from being injected to the cart
+   * It relies on a publically available method @findSingleProduct to query the database for the product
    */
   private async validateParsedCookie(
     cart: ShoppingCart,

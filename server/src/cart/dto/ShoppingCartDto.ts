@@ -13,7 +13,8 @@ export class ShoppingCartItem extends CartItemDto {
 
 export enum CART_ACTION {
   ADD_ITEM = 'ADD_ITEM',
-  REMOVE_ITEM = 'REMOVE_ITEM',
+  DECREASE_ITEM_QUANTITY = 'DECREASE_ITEM_QUANTITY',
+  REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART',
 }
 
 export class UpdateCartItem {

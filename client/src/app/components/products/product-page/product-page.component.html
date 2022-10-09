@@ -1,7 +1,6 @@
-<div class="h-max">
+<div class="">
   <div *ngIf="isLoading" class="text-center h-[100vh]">
     <app-spinner></app-spinner>
-    <p>Loading...</p>
   </div>
   <div class="text-center" *ngIf="isError">
     <p class="font-bold text-red-500 text-lg">Oh no.. :( {{ errorMsg }}</p>
@@ -22,12 +21,18 @@
       </button>
       <section id="productBanner">
         <div class="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1">
-          <div class="xl:w-[100%] w-full">
-            <img
+          <div class="w-[364px]">
+            <!-- <img
+              
               class="w-full"
               [src]="product.productImage![0]"
               alt="product image"
-            />
+            /> -->
+            <ng-image-slider
+              [images]="imageObject"
+              #nav
+              [imageSize]="{ width: 364, height: 333 }"
+            ></ng-image-slider>
           </div>
           <div class="ml-4">
             <h1 class="text-center font-bold text-xl mb-2 mt-5">
@@ -52,9 +57,13 @@
             <div class="text-center mt-2 mb-2">
               <button
                 class="text-white font-bold rounded p-2 w-[150px] bg-blue-500 hover:cursor-pointer hover:bg-blue-900 duration-500"
+                (click)="handleItemClick(product)"
               >
                 Add to Cart
               </button>
+              <div *ngIf="isAddedToCart">
+                <app-spinner></app-spinner>
+              </div>
             </div>
             <div>
               <h5 class="font-bold text-center mb-2">
@@ -74,7 +83,7 @@
   </section>
   <section id="reviews">
     <div
-      class="xl:w-[65%] md:w-[75%] w-full m-2 mx-auto"
+      class="xl:w-[65%] md:w-[75%] w-full m-2 mx-auto h-100"
       *ngIf="!isLoading && product.reviews.length !== 0"
     >
       <h1 class="font-bold text-md text-center text-xl">Reviews</h1>

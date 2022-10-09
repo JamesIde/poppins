@@ -9,7 +9,7 @@ import {
   throwError,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Product } from '../types/product-interface';
+import { Product } from '../types/Product';
 
 @Injectable({
   providedIn: 'root',
